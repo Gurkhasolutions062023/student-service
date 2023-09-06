@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/java2023
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  config:
+    user: gs
+    password: 2344
+
+  input:
+    value: 2
+
+
+
