@@ -1,4 +1,4 @@
-Asssinent:
+Asssinent 1:
 
     /// create a service name >> account-service
     //create controller
@@ -13,3 +13,11 @@ Asssinent:
 
     // create a api -- postMapping
     // save accountDetails
+
+Asssinent 2 :
+      
+       // get All account details
+       // get accounts by id
+       // delete account by id
+
+

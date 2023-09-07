@@ -2,8 +2,15 @@ package com.gs.studentservice.controller;
 
 import com.gs.studentservice.model.Student;
 import com.gs.studentservice.service.StudentService;
+import com.gs.studentservice.utils.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -34,12 +41,48 @@ public class StudentController {
 
     // create operation-- help us to create a student record
 
-    @PostMapping("/students")
-    public Student createStudent(@RequestBody Student student){
-      return studentService.createStudent(student);
+    /// Read -- All the records from database
+
+    @PostMapping(ApplicationConstants.endpoints)
+    public ResponseEntity<?> createStudent(@RequestBody Student student){
+      Student student1= studentService.createStudent(student);
+      return new ResponseEntity<>(student1,HttpStatus.OK);
 
 
     }
+
+    @GetMapping(ApplicationConstants.endpoints)
+    public List<Student> getAllStudents(){
+
+        String s="jdjdj";
+        List<Student> students=studentService.getAllStudents();
+
+        return students;
+    }
+
+
+    @GetMapping(ApplicationConstants.endpoints+"/{stdId}")
+    public Student getStudentById(@PathVariable Long stdId ){
+       return studentService.getUserById(stdId).get();
+
+    }
+    @DeleteMapping("/students/{stdId}")
+    public Object deleteUserById(@PathVariable Long stdId){
+        Map<String,String> info= new HashMap<>();
+        String deleteMessage=studentService.deleteStudents(stdId);
+        info.put("message",deleteMessage);
+        return info;
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 

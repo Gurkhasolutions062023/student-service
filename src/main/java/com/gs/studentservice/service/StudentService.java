@@ -4,6 +4,9 @@ import com.gs.studentservice.repo.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StudentService {
 
@@ -34,5 +37,38 @@ public class StudentService {
        Student saveStudent = studentRepo.save(student);
        return saveStudent;
 
+    }
+
+    public List<Student> getAllStudents() {
+        return studentRepo.findAll();
+    }
+
+    public Optional<Student> getUserById(Long stdId) {
+        if(stdId==null){
+            //throw some exception
+            return null;
+        }
+      Optional<Student> studentById= studentRepo.findById(stdId);
+        if(studentById.isPresent()){
+            return studentById;
+        }
+        // throw some exception
+        return null;
+
+    }
+
+    public String deleteStudents(Long stdId) {
+        try {
+           Optional<Student> student= studentRepo.findById(stdId);
+           if(student.isPresent()) {
+               studentRepo.deleteById(stdId);
+               return "Student with id " + stdId + " deleted successfully.";
+           }
+           return "Student with id "+stdId+ " doesnot exit in db";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
