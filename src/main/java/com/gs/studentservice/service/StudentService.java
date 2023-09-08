@@ -71,4 +71,15 @@ public class StudentService {
 
         return null;
     }
+
+    public Student updateStudent(Optional<Student> studentById, Student student) {
+        Student currentStudent=studentById.get();
+        currentStudent.setAddress(student.getAddress());
+        currentStudent.setEmail(student.getEmail());
+        currentStudent.setFirstName(student.getFirstName());
+        currentStudent.setLastName(student.getLastName());
+
+        return studentRepo.save(currentStudent);
+
+    }
 }

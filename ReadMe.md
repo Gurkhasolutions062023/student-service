@@ -1,4 +1,4 @@
-Asssinent 1:
+Assignment 1:
 
     /// create a service name >> account-service
     //create controller
@@ -14,10 +14,13 @@ Asssinent 1:
     // create a api -- postMapping
     // save accountDetails
 
-Asssinent 2 :
+Assigment 2 :
       
        // get All account details
        // get accounts by id
        // delete account by id
 
 
+Assigment 3 :
+
+       // Create update method

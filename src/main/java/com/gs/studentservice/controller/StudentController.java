@@ -3,6 +3,7 @@ package com.gs.studentservice.controller;
 import com.gs.studentservice.model.Student;
 import com.gs.studentservice.service.StudentService;
 import com.gs.studentservice.utils.ApplicationConstants;
+import com.gs.studentservice.utils.StudentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -51,13 +53,31 @@ public class StudentController {
 
     }
 
+    // Oauth --->
+
+    // gooogle---> gmail --- verfied
+    // username and password
+    // signin with googgle or facebook
+    // accessToken @ refereshToken
+
+
+
     @GetMapping(ApplicationConstants.endpoints)
-    public List<Student> getAllStudents(){
-
-        String s="jdjdj";
+    public ResponseEntity<?> getAllStudents(){
+        StudentResponse<List<Student>> studentResponse= new StudentResponse<>();
         List<Student> students=studentService.getAllStudents();
+        if(students.size()==0) {
+            studentResponse.setStatus(HttpStatus.OK.value());
+            studentResponse.setMessage("No students are available");
+            return ResponseEntity.ok().body(studentResponse);
+        }
+        studentResponse.setStatus(HttpStatus.OK.value());
+        studentResponse.setMessage(students.size()+" students are available");
+        studentResponse.setData(students);
+        return ResponseEntity.ok().body(studentResponse);
 
-        return students;
+
+
     }
 
 
@@ -66,12 +86,33 @@ public class StudentController {
        return studentService.getUserById(stdId).get();
 
     }
+
     @DeleteMapping("/students/{stdId}")
     public Object deleteUserById(@PathVariable Long stdId){
         Map<String,String> info= new HashMap<>();
         String deleteMessage=studentService.deleteStudents(stdId);
         info.put("message",deleteMessage);
         return info;
+    }
+
+    @PutMapping("/students/{std_id}")
+    public ResponseEntity<?> updateStudents(
+            @RequestBody Student student,
+            @PathVariable Long std_id){
+        Optional<Student> studentById = studentService.getUserById(std_id);
+       if(student.getAddress()==null){
+           return ResponseEntity.badRequest().body("address should not be null");
+       }
+
+        if(studentById.isPresent()){
+          Student updatedStudent=  studentService.updateStudent(studentById,student);
+          return ResponseEntity.ok().body(updatedStudent);
+
+        }
+
+        return ResponseEntity.badRequest().body("No user with id "+std_id+"  found");
+
+
     }
 
 
