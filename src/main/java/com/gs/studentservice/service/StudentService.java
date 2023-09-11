@@ -1,4 +1,6 @@
 package com.gs.studentservice.service;
+import com.gs.studentservice.exception.StudentIdNotNull;
+import com.gs.studentservice.exception.StudentNotFoundException;
 import com.gs.studentservice.model.Student;
 import com.gs.studentservice.repo.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +48,14 @@ public class StudentService {
     public Optional<Student> getUserById(Long stdId) {
         if(stdId==null){
             //throw some exception
-            return null;
+            throw new StudentIdNotNull("Student Id cannot be null");
         }
       Optional<Student> studentById= studentRepo.findById(stdId);
         if(studentById.isPresent()){
             return studentById;
         }
         // throw some exception
-        return null;
+        throw new StudentIdNotNull("Student Id cannot be found");
 
     }
 
@@ -64,12 +66,14 @@ public class StudentService {
                studentRepo.deleteById(stdId);
                return "Student with id " + stdId + " deleted successfully.";
            }
-           return "Student with id "+stdId+ " doesnot exit in db";
+           throw new StudentNotFoundException("Student with id " + stdId + " doesnot exit.");
         } catch (Exception e){
             e.printStackTrace();
+            throw new StudentNotFoundException(e.getMessage());
         }
 
-        return null;
+
+
     }
 
     public Student updateStudent(Optional<Student> studentById, Student student) {
@@ -80,6 +84,11 @@ public class StudentService {
         currentStudent.setLastName(student.getLastName());
 
         return studentRepo.save(currentStudent);
+
+    }
+
+    public Student getStudentByEmail(String email) {
+       return studentRepo.findByEmail(email);
 
     }
 }

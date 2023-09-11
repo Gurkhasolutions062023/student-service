@@ -4,6 +4,7 @@ import com.gs.studentservice.model.Student;
 import com.gs.studentservice.service.StudentService;
 import com.gs.studentservice.utils.ApplicationConstants;
 import com.gs.studentservice.utils.StudentResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +47,7 @@ public class StudentController {
     /// Read -- All the records from database
 
     @PostMapping(ApplicationConstants.endpoints)
-    public ResponseEntity<?> createStudent(@RequestBody Student student){
+    public ResponseEntity<?> createStudent(@RequestBody @Valid Student student){
       Student student1= studentService.createStudent(student);
       return new ResponseEntity<>(student1,HttpStatus.OK);
 
@@ -76,8 +77,6 @@ public class StudentController {
         studentResponse.setData(students);
         return ResponseEntity.ok().body(studentResponse);
 
-
-
     }
 
 
@@ -97,7 +96,7 @@ public class StudentController {
 
     @PutMapping("/students/{std_id}")
     public ResponseEntity<?> updateStudents(
-            @RequestBody Student student,
+            @RequestBody  @Valid Student student,
             @PathVariable Long std_id){
         Optional<Student> studentById = studentService.getUserById(std_id);
        if(student.getAddress()==null){
@@ -114,6 +113,11 @@ public class StudentController {
 
 
     }
+
+   @GetMapping(ApplicationConstants.endpoints+"/search")
+    public ResponseEntity<?> getStudentByEmail(@RequestParam(required = true ) String email){
+     return  ResponseEntity.ok().body(studentService.getStudentByEmail(email));
+   }
 
 
 
