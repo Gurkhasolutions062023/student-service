@@ -12,6 +12,4 @@ public interface StudentRepo extends JpaRepository<Student,Long> {
 
     Student findByEmail(String email);
 
-    @Query("select * from students where email= ? AND address=?")
-    List<Student> getStudentByEmailAndAddress(String email, String address);
 }
